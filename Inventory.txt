@@ -1,0 +1,139 @@
+package edu.cpt187.earl.exercise5;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Inventory {
+
+	
+
+	private final String[] DISCOUNT_NAMES = {"Member","Senior","None"};
+	private final double[] DISCOUNT_RATES = {.25, .15, 0.0};
+	private final String[] PRIZE_NAMES = {"Candy", "Discount ticket", "Dog Treat"};
+	private final int MAX_ITEMS = 5;
+	private int[] itemIDs = new int[MAX_ITEMS];
+	private String[] itemNames = new String[MAX_ITEMS];
+	private double[] itemPrices = new double[MAX_ITEMS];
+	private int[] itemInStockCounts = new int[itemNames.length];
+	private int[] itemsSoldCounts = new int[itemNames.length];
+	private int itemSearchResults = 0;
+	private int accumRecordCount = 0;
+	private int recordCount = 0;
+	private int itemIndex = 0;
+	
+
+
+
+
+	public void setReduceStock(String borrowedHowMany, int borrowedIndex)
+	{
+		itemInStockCounts[borrowedIndex] = itemInStockCounts[borrowedIndex] - Integer.parseInt(borrowedHowMany);
+		itemsSoldCounts[borrowedIndex] = itemsSoldCounts[borrowedIndex] + Integer.parseInt(borrowedHowMany);
+	}
+	public void setLoadItems(String borrowedFileName)
+	{
+		int localIndex = 0;
+		recordCount = 0;
+		try 
+		{
+			Scanner infile = new Scanner(new FileInputStream(borrowedFileName));
+
+			while (infile.hasNext() == true && localIndex < MAX_ITEMS)
+			{
+				itemIDs[localIndex] = infile.nextInt();
+				itemNames[localIndex] = infile.next();
+				itemPrices[localIndex] = infile.nextDouble();
+				itemInStockCounts[localIndex] = infile.nextInt();
+				recordCount++;
+				localIndex++;
+				accumRecordCount++;
+			}
+			infile.close();
+		}
+		
+		catch(IOException ex)
+		{
+			localIndex = -1;
+			System.out.println("It not there" + ex);
+		}
+	}
+	public void setItemIndex(String borrowedTarget)
+	{
+		int localIndex = 0;
+		int found = -1;
+		
+		while (localIndex < recordCount)
+		{
+			if(Integer.parseInt(borrowedTarget) == itemIDs[localIndex])
+			{
+				found = localIndex;
+				localIndex = recordCount;
+			}
+			else
+			{
+				localIndex++;
+			}
+		}
+		itemIndex = found;
+	}
+
+
+
+	public int[] getItemInStockCounts()
+	{
+		return itemInStockCounts;
+	}
+	public String[] getItemNames()
+	{
+		return itemNames;
+	}
+	public double[] getItemPrices()
+	{
+		return itemPrices;
+	}
+	public String[] getDiscountNames()
+	{
+		return DISCOUNT_NAMES;
+	}
+	public double[] getDiscountRates()
+	{
+		return DISCOUNT_RATES;
+	}
+	public String[] getPrizeNames()
+	{
+		return PRIZE_NAMES;
+	}
+	public int getItemSearchResults()
+	{
+		return itemSearchResults;
+	}
+	public int getItemIndex()
+	{
+		return itemIndex;
+	}
+	public int getRecordCount()
+	{
+		return recordCount;
+	}
+	public int getItemID()
+	{
+		return itemIDs[itemIndex];
+	}
+	public String getItemName()
+	{
+		return itemNames[itemIndex];
+	}
+	public double getItemPrice()
+	{
+		return itemPrices[itemIndex];
+	}
+	public int getAccumRecordCount()
+	{
+		return accumRecordCount;
+	}
+	public int[] itemsSoldCounts()
+	{
+		return itemsSoldCounts();
+	}
+}

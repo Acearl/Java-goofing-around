@@ -1,0 +1,197 @@
+package edu.cpt187.earl.exercise5;
+
+import java.util.Random;
+
+public class SodOrder {
+
+	int[] itemCounts = {0,0,0};
+	int[] discountCounts = {0,0,0};
+	int[] prizeCounts = {0,0,0};
+
+	char itemSelection = ' ';
+	char discountSelection = ' ';
+
+	String itemName = "";
+	String discountName = "";
+	String howMany = "0";
+	String prizeName = "";
+
+	double itemPrice = 0.0;
+	double discountRate = 0.0;
+	double taxRate = 0.0;
+
+	Random rng = new Random();
+
+
+
+
+	SodOrder(double borrowedTaxRate)
+	{
+		taxRate = borrowedTaxRate;
+	}
+
+	public void setItemPrice(double[] borrowedItemPrices)
+	{
+		if(itemSelection =='A')
+		{
+			itemPrice = borrowedItemPrices[0];
+		}
+		else if(itemSelection == 'B')
+		{
+			itemPrice = borrowedItemPrices[1];
+		}
+		else
+		{
+			itemPrice = borrowedItemPrices[2];
+		}
+	}
+	public void setHowMany(String borrowedHowMany)
+	{
+		howMany = borrowedHowMany;
+	}
+	public void setDiscountSelection(char borrowedMenuSelection, String[] borrowedDiscountNames, double[] borrowedDiscountRates)
+	{
+		discountSelection = borrowedMenuSelection;
+
+		setDiscountName(borrowedDiscountNames);
+		setDiscountRate(borrowedDiscountRates);
+	}
+	public void setDiscountName(String[] borrowedDiscountNames)
+	{
+		if(discountSelection =='A')
+		{
+			discountName = borrowedDiscountNames[0];
+			discountCounts[0]++;
+		}
+		else if(discountSelection == 'B')
+		{
+			discountName = borrowedDiscountNames[1];
+			discountCounts[1]++;
+		}
+		else
+		{
+			discountName = borrowedDiscountNames[2];
+			discountCounts[2]++;
+		}
+	}
+	public void setDiscountRate(double[] borrowedDiscountRates)
+	{
+		if(discountSelection =='A')
+		{
+			discountRate = borrowedDiscountRates[0];
+		}
+		else if(discountSelection == 'B')
+		{
+			discountRate = borrowedDiscountRates[1];
+		}
+		else
+		{
+			discountRate = borrowedDiscountRates[2];
+		}
+	}
+	public void setPrizeName(String[] borrowedPrizeNames)
+	{
+		int prizeSelection = 0;
+		prizeSelection = getRandomNumber(borrowedPrizeNames.length);
+
+		if(prizeSelection == 0)
+		{
+			prizeName = borrowedPrizeNames[0];
+			prizeCounts[0]++;
+		}
+		else if(prizeSelection == 1)
+		{
+			prizeName = borrowedPrizeNames[1];
+			prizeCounts[1]++;
+		}
+		else
+		{
+			prizeName = borrowedPrizeNames[2];
+			prizeCounts[2]++;
+		}
+	}
+	public void setDecreaseInStock(Inventory borrowedInventory)
+	{
+		//int localIndex = borrowedInventory.getItemIndex();
+		borrowedInventory.setReduceStock(howMany, borrowedInventory.getItemIndex());
+	}
+	
+	public boolean getInStockFlag(int[] borrowedInStockCounts, int borrowedIndex)
+	{
+		boolean inStock;
+		if(borrowedInStockCounts[borrowedIndex] >= Integer.parseInt(howMany))
+		{
+			inStock = true;
+		}
+		else
+		{
+			inStock = false;
+		}
+		return inStock;
+	}
+	public String getItemName()
+	{
+		return itemName;
+	}
+	public double getItemPrice()
+	{
+		return itemPrice;
+	}
+	public String getHowMany()
+	{
+		return howMany;
+	}
+	public String getDiscountName()
+	{
+		return discountName;
+	}
+	public double getDiscountRate()
+	{
+		return discountRate;
+	}
+	public double getDiscountAmt(double borrowedItemPrice)//how much the user saved compared to full price
+	{
+		return (borrowedItemPrice - getDiscountPrice(borrowedItemPrice)) * Integer.parseInt(howMany);
+	}
+	public double getDiscountPrice(double borrowedItemPrice)//discounted price per item
+	{
+		return borrowedItemPrice * (1 - discountRate);
+	}
+	public double getSubTotal(double borrowedItemPrice)//total cost before tax
+	{
+		return Integer.parseInt(howMany) * getDiscountPrice(borrowedItemPrice);
+	}
+	public double getTaxRate()
+	{
+		return taxRate;
+	}
+	public double getTaxAmt(double borrowedItemPrice)
+	{
+		return getSubTotal(borrowedItemPrice) * taxRate;
+	}
+	public double getTotalCost(double borrowedItemPrice)
+	{
+		return getSubTotal(borrowedItemPrice) * (1 + taxRate);
+	}
+	public int[] getItemCounts()
+	{
+		return itemCounts;
+	}
+	public int[] getDiscountCounts()
+	{
+		return discountCounts;
+	}
+	public int[] getPrizeCounts()
+	{
+		return prizeCounts;
+	}
+	public String getPrizeName()
+	{
+		return prizeName;
+	}
+	public int getRandomNumber(int borrowedArrayLength)
+	{
+		return rng.nextInt(borrowedArrayLength);
+	}
+
+}
